@@ -16,7 +16,7 @@ with open(csvpath) as csvfile:
     csv_header = next(csvreader)
 
     for row in csvreader:
-        x += 1
+        x = x + 1
 
         months.append(row[0])
         profit_loss.append(row[1])

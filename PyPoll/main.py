@@ -39,7 +39,7 @@ print("Total Votes: " + str(count))
 print("-------------------------------------")
 
 for i in range(len(candidates)):
-    print(f"{candidates[1]}: {str(percent_of_votes[1])} ({str(totalvotes[1])})")
+    print(f"{candidates[i]}: {str(percent_of_votes[i])} ({str(totalvotes[i])})")
 
 
 print("-------------------------------------")
