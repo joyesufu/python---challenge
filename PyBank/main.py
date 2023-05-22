@@ -3,58 +3,80 @@ import csv
 
 csvpath = os.path.join("Resources", "budget_data.csv")
 
-months = []
-month_change = []
-profit_loss = []
-pl_change = 0
-total_profit = 0
-pre_profit = 0
-x = 0
 
-with open(csvpath) as csvfile:
+with open(csvpath, encoding="utf") as csvfile:
+
     csvreader = csv.reader(csvfile, delimiter=",")
+
+    print(csvreader)
+
     csv_header = next(csvreader)
+    # print(f"CSV Header: {csv_header}")
 
+    total_months = 0
+    total = []
+    monthly_change = []
+    profit_increase = 0
+    profit_decrease = 0
+    dates = []
+    
+    
     for row in csvreader:
-        x = x + 1
+        # Date for each row added to a list
+        dates.append(row[0])
+        
+        # Total Number of months/rows
+        total_months += 1
 
-        months.append(row[0])
-        profit_loss.append(row[1])
+        total.append(int(row[1]))
 
-        total_profit = total_profit + int(row[1])
+        
 
-        end_profit = int(row[1])
-        monthly_profit = end_profit - pre_profit
+    # csvreader.seek(0)
 
-        month_change.append(monthly_profit)
-        pl_change = pl_change + monthly_profit
-        pre_profit = end_profit
+    for i in range(len(total)-1):
+        # Profit change from month to month
+        monthly_change.append(total[i+1]-total[i])
 
-        avg_change = (pl_change/x)
+        # Total Average Profit Change Over the Entire Period
+        avg_change = sum(monthly_change)/(len(total)-1)
 
-        great_increase = max(month_change)
-        great_decrease = min(month_change)
+    # Greatest Profit increase for one period
+    profit_increase = max(monthly_change)
 
-        high_date = months[month_change.index(great_increase)]
-        low_date = months[month_change.index(great_decrease)]
+    max_index = monthly_change.index(profit_increase)
+
+    max_month = dates[max_index+1]
+
+    # Greatest Profit decrease for one period
+    profit_decrease = min(monthly_change)
+
+    min_index = monthly_change.index(profit_decrease)
+
+    min_month = dates[min_index+1]
 
 
-print("Financial Analysis")
-print("-----------------------------------")
-print("Total Months: " + str(x))
-print(f"Total: ${total_profit}")
-print("Average Change: $" + str(int(avg_change)))
-print("Greatest Increase In Profits: " + str(high_date) + " ($" + str(great_increase) + ")")
-print("Greatest Decrease In Profits: " + str(low_date) + " ($" + str(great_decrease) + ")")
+        
+    
+    
+    # Print Final Results!
+    print("Financial Analysis")
+    print("----------------------------")
+    
+    print("Total Months: " + str(total_months))
+    print("Total: " + "$" + str(sum(total)))
+    print(f"Average Change: ${avg_change:.2f}")
+    print(f"Greatest Increase in Profits: {max_month} (${profit_increase})")
+    print(f"Greatest Decrease in Profits: {min_month} (${profit_decrease})")
 
 output_path = os.path.join("Analysis", "analysis.txt")
 with open(output_path, "w") as text:
 
     text.write("Financial Analysis\n")
-    text.write("--------------------------------------------------\n")
-    text.write("Total Months: " + str(x) + "\n")
-    text.write("Total: $" + str(total_profit) + "\n")
-    text.write("Average Change: $" + str(int(avg_change)) + "\n")
-    text.write("Greatest Increase In Profits: " + str(high_date) + " ($" + str(great_increase) + ")\n")
-    text.write("Greatest Increase In Profits: " + str(low_date) + " ($" + str(great_decrease) + ")\n")
+    text.write("--------------------------\n")
+    text.write("Total Months: " + str(total_months) + "\n")
+    text.write("Total: $" + str(sum(total)) + "\n")
+    text.write(f"Average Change: ${avg_change:.2f} \n")
+    text.write(f"Greatest Increase In Profits: {max_month} (${profit_increase})\n")
+    text.write(f"Greatest Increase In Profits: {min_month} (${profit_decrease})\n")
         
